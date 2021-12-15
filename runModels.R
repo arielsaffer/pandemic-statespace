@@ -14,9 +14,9 @@ dev.off() # Reset plot space
 palette("default")
 
 # Which model do you want to run?
-model = Binomial_Pandemic # StateSpace_Pandemic 
+model = Binomial_Pandemic 
 # Options defined in models.R, e.g. Binomial_Pandemic, Temporal_Pandemic, 
-# Temporal_Pandemic_Intx, StateSpace_Pandemic, your own!
+# Temporal_Pandemic_IntX, StateSpace_Pandemic, your own!
 
 # Did you pick a static or dynamic model?
 model_type = "static" # "static" or "dynamic"
