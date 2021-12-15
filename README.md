@@ -1,5 +1,6 @@
 # pandemic-statespace
 a Bayesian statistical support to the PoPS global pest spread model
+
 currently using jags and the data inputs obtained for a given case study with the [PoPS Global Data Acquisition notebook](https://github.com/ncsu-landscape-dynamics/PoPS-Global/blob/master/notebooks/1_data_acquisition_format.ipynb)
 
 # Objectives
