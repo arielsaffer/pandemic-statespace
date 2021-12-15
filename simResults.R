@@ -115,6 +115,8 @@ abline(h=0.5, lty=2, col="firebrick3")
 text(x=as.integer(rownames(top12)),y=as.numeric(top12$mean_intros) + 0.05, 
      labels=top12$ISO3, cex=0.9, col="#36454F")
 
+palette("default")
+palette(adjustcolor(palette(),alpha.f=0.3))
 
 ### PLOT OVER TIME
 # For dynamic models, plot introductions over time for the top 12 locations
@@ -122,6 +124,7 @@ text(x=as.integer(rownames(top12)),y=as.numeric(top12$mean_intros) + 0.05,
 if (model_type == "dynamic"){
   
   nlines = 400
+  samp_intros <- sample.int(dim(cum_intros)[3],nlines)
   
   counter <- 0 
   
@@ -130,10 +133,10 @@ if (model_type == "dynamic"){
     counter <- counter + 1
     plot(year_set, cum_intros[,country,1], ylim = c(0, max(cum_intros[nt,country,])), 
          type='l', col=8, main=static_data$ISO3[country], xlab="Year", ylab="Cumulative Intros")
-    for (i in 2:nlines){
+    for (i in samp_intros){
       lines(year_set, (cum_intros[,country,i] + rnorm(1,0,0.2)), type='l', col=8)
     }
-    lines(year_set, as.integer(rowMeans(cum_intros[,country,1:nlines])), 
+    lines(year_set, round(rowMeans(cum_intros[,country,1:nlines])), 
           type='l', lwd=2, col='firebrick3')
     if ((counter+3) %% 6 == 0){
       legend("topleft", c("Single run", "Mean across runs"), 
@@ -144,7 +147,7 @@ if (model_type == "dynamic"){
 
 # Table of countries with intros in > 50% of runs
 kable(results[results$mean_intros > 0.5,], col.names=c("Country","% Runs with Intro"), 
-      caption = "Percent of runs with introduction for countries with introductions in over 50% of runs.")
+      caption = "Percent of runs with introduction for \ncountries with introductions in over 50% of runs.")
 
 
 # That's all for now!
