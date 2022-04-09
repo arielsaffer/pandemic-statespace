@@ -9,7 +9,24 @@
 
 ##### Libraries
 library(rjags)
-library(knitr) 
+library(knitr)
+library(fda)
+library(MCMCvis)
+
+# To handle the distance matrix (.npy)
+library(reticulate)
+library(matrixStats)
+
+# To make a map
+library(rgdal)
+library(sf)
+library(sp)
+
+# Optional plotting
+library(ggplot2)
+library(tidybayes)
+library(cowplot)
+library(tidyverse)
 
 ##### Data location
 
@@ -28,16 +45,27 @@ if (model_name == "slf_model") {
 
 #### Case study parameters
 
-# Define the commodity aggregate, start year
+# Define start year, whether you want to use separate ("adjusted") or 
+# aggregated ("agg") commodities, and an optional commodity list
+
+# For temporal models, define the timestep as "monthly" or "annual"
+
 if (model_name =="slf_model"){
   start_year = 2006
-  commodities = "6802"
+  commodity_type = "adjusted"
+  commodity_list = NULL # c("6802","6803")
+  timestep = "monthly"
 } else if (model_name == "ToBRFV_model"){
   start_year = 2015
-  commodities = "120991"
-} else {
-  start_year = 2010 # You decide!
-  commodities = "HS-CODE"
+  commodity_type = "adjusted"
+  commodity_list = NULL
+} else if (model_name =="tuta_absoluta_model"){ 
+  start_year = 2004
+  commodity_type = "agg"
+  } else { 
+    start_year = 2010 # You decide!
+    commodity_type = "adjusted"
+    commodity_list = c("HSCODE1","HSCODE2")
   }
 
 
@@ -54,8 +82,9 @@ invlogit <- function(x){
 }
 
 # Extracting 4-digit year from trade files
-get_year <- function(fil){
-  substr(fil, (nchar(fil)-7), (nchar(fil)-4))[1]
+get_time <- function(file_path){
+  sub_file <- str_split(basename(file_path),"_",simplify=TRUE)[2]
+  strsplit(sub_file,'.',fixed=TRUE)[[1]][1]
 }
 
 
