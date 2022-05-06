@@ -27,7 +27,7 @@ for(i in 1:n){
 #### Priors
 
 for(i in 1:n){
-  e[i] ~ dgamma(0.1,0.1)
+  e[i] ~ dnorm(0,0.25)
 }
 
 for (j in 1:2){
